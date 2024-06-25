@@ -81,7 +81,3 @@ We welcome contributions from the community. To contribute, follow these steps:
 5. Create a new Pull Request.
 
 Please ensure your code follows our coding standards and includes appropriate tests.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
