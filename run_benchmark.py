@@ -1,5 +1,6 @@
 import argparse
 import os
+import asyncio
 import multiprocessing as mp
 from data import (
     prepare_sentiment_data, prepare_headline_data, prepare_ner_data, prepare_unit_data,
@@ -20,7 +21,7 @@ TASKS = {
     'headline_classification': (prepare_headline_data, test_headline_classification),
     'ner': (prepare_ner_data, test_ner),
     'unit_classification': (prepare_unit_data, test_unit_classification),
-    'relation_classification': (prepare_relation_cls_data,  ),
+    'relation_classification': (prepare_relation_cls_data, test_relation_classification),
     'multiclass_classification': (prepare_multiclass_cls_data, test_multiclass_classification),
     'esg_classification': (prepare_esg_cls_data, test_esg_classification),
     'causal_classification': (prepare_causal_cls_data, test_causal_classification),
@@ -33,30 +34,35 @@ TASKS = {
     'question_answering': (prepare_qa_data, test_qa),
 }
 
-def run_task(task_name, model_name, max_length, batch_size):
-    prepare_func, test_func = TASKS.get(task_name, (None, None))
-    if not prepare_func or not test_func:
-        raise ValueError(f"Task {task_name} not recognized")
-
+async def async_prepare_task(task_name, prepare_func):
     ensure_directory_exists(f"data/raw/{task_name}")
     ensure_directory_exists(f"data/processed/{task_name}")
 
     # Prepare the data
     print(f"Preparing {task_name} data...")
-    prepare_func(task_name)
+    await asyncio.to_thread(prepare_func, task_name)
 
+def run_benchmark_task(task_name, test_func, model_name, max_length, batch_size):
     # Run the benchmark
     print(f"Running {task_name} benchmark...")
     test_func(model_name=model_name, data_path=task_name, max_length=max_length, batch_size=batch_size)
-
     print(f"Benchmark for {task_name} completed.")
 
-def main(args):
+async def main(args):
     tasks = args.task.split(',')
-    processes = []
+    
+    # Run preparation tasks asynchronously
+    prepare_tasks = [
+        async_prepare_task(task.strip(), TASKS[task.strip()][0]) for task in tasks
+    ]
+    await asyncio.gather(*prepare_tasks)
 
+    # Run benchmarking tasks in parallel using multiprocessing
+    processes = []
     for task in tasks:
-        p = mp.Process(target=run_task, args=(task.strip(), args.model_name, args.max_length, args.batch_size))
+        task_name = task.strip()
+        test_func = TASKS[task_name][1]
+        p = mp.Process(target=run_benchmark_task, args=(task_name, test_func, args.model_name, args.max_length, args.batch_size))
         processes.append(p)
         p.start()
 
@@ -70,4 +76,4 @@ if __name__ == "__main__":
     parser.add_argument("--max_length", type=int, default=128, help="Maximum sequence length")
     parser.add_argument("--batch_size", type=int, default=32, help="Batch size")
     args = parser.parse_args()
-    main(args)
+    asyncio.run(main(args))
