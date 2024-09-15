@@ -8,7 +8,7 @@ MODEL_URL_MAP = {
     # Add other model URLs here
 }
 
-API_TOKEN = "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"  # Specify your Hugging Face API token here
+API_TOKEN = ""  # Specify your Hugging Face API token here
 
 def run_benchmark_task(task_name, test_func, model_url):
     # Load and combine datasets
