@@ -137,3 +137,6 @@ results/
 scripts/
 data/raw
 data/processed
+benchmarks/NER_raw.py
+benchmarks/RE test.py
+benchmarks/relation_extraction.py

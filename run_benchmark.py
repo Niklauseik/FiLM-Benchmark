@@ -1,5 +1,4 @@
 import argparse
-import os
 import asyncio
 import multiprocessing as mp
 from data import (

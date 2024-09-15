@@ -2,6 +2,7 @@ import os
 import torch
 from torch.utils.data import DataLoader
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+import pandas as pd
 
 
 def ensure_directory_exists(directory_path):
@@ -33,4 +34,14 @@ def get_or_preprocess_data(data_path, dataset_class, dataset_name):
     else:
         return 0, None
 
+def load_and_combine_datasets(task_name):
+    train_data_path = f"data/raw/{task_name}/train.csv"
+    valid_data_path = f"data/raw/{task_name}/valid.csv"
+    test_data_path = f"data/raw/{task_name}/test.csv"
 
+    train_data = pd.read_csv(train_data_path)
+    valid_data = pd.read_csv(valid_data_path)
+    test_data = pd.read_csv(test_data_path)
+
+    combined_data = pd.concat([train_data, valid_data, test_data], ignore_index=True)
+    return combined_data

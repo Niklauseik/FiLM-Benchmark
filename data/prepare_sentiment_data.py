@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 
 def fetch_dataset(split, offset, length=100):
-    url = f"https://datasets-server.huggingface.co/rows?dataset=ChanceFocus%2Fen-fpb&config=default&split={split}&offset={offset}&length={length}"
+    url = f"https://datasets-server.huggingface.co/rows?dataset=ChanceFocus%2Fflare-fiqasa&config=default&split={split}&offset={offset}&length={length}"
     response = requests.get(url)
     response.raise_for_status()  # Ensure we notice bad responses
     return response.json()['rows']

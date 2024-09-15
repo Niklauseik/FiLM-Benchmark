@@ -54,7 +54,7 @@ def fine_tune_model(model_name, data_path, max_length=128, batch_size=32, epochs
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)  # Adjust num_labels as needed
     model.to(device)
 
-    output_dir = f'./results/{model_name}'
+    output_dir = f'./results/{data_path}/{model_name}'
     last_checkpoint = None
     if os.path.isdir(output_dir):
         checkpoints = [d for d in os.listdir(output_dir) if d.startswith('checkpoint-')]

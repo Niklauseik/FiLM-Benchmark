@@ -89,7 +89,7 @@ def fine_tune_model(model_name, data_path, max_length=128, batch_size=32, epochs
     model = AutoModelForTokenClassification.from_pretrained(model_name, num_labels=len(label_to_id))
     model.to(device)
 
-    output_dir = f'./results/{model_name}'
+    output_dir = f'./results/{data_path}/{model_name}'
 
     training_args = TrainingArguments(
         output_dir=output_dir,
@@ -111,6 +111,8 @@ def fine_tune_model(model_name, data_path, max_length=128, batch_size=32, epochs
     )
 
     trainer.train()
+
+    
 
     return model, tokenizer
 

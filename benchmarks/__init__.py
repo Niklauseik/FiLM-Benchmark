@@ -13,3 +13,4 @@ from .financial_distress_identification import test_financial_distress_identific
 from .claim_analysis import test_claim_analysis
 from .numeric_labeling import test_numeric_labeling
 from .question_answering import test_qa
+from .llm_sentiment_analysis import llm_sentiment_analysis
