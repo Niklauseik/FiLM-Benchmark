@@ -62,22 +62,9 @@ The pipeline can be configured through command-line arguments:
 - `--model_name`: Specifies the name of the model to use (e.g., distilbert-base-uncased).
 - `--max_length`: Maximum sequence length for the tokenizer.
 - `--batch_size`: Batch size for training and evaluation.
-- `--epochs`: Number of training epochs.
 
 Example:
 
 ```bash
 python run_benchmark.py --task sentiment_analysis --model_name distilbert-base-uncased --max_length 128 --batch_size 32 --epochs 3
 ```
-
-## Contributing
-
-We welcome contributions from the community. To contribute, follow these steps:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Create a new Pull Request.
-
-Please ensure your code follows our coding standards and includes appropriate tests.
